@@ -1,0 +1,18 @@
+[project]
+name = "ado-pipeline-doctor"
+version = "0.1.0"
+description = "Failed CI/ADO log → RCA JSON + suggested remediations (human approval required)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = []
+
+[project.scripts]
+pipeline-doctor = "pipeline_doctor.cli:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
