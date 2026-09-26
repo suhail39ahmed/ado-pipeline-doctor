@@ -1,0 +1,7 @@
+2026-09-20T10:01:02.100Z ##[section]Starting: NuGetCommand
+2026-09-20T10:01:02.200Z ==============================================================================
+2026-09-20T10:01:02.300Z Task         : NuGet
+2026-09-20T10:01:03.000Z ##[error]Error: Unable to load the service index for source https://pkgs.dev.azure.com/contoso/_packaging/feed/nuget/v3/index.json.
+2026-09-20T10:01:03.100Z ##[error]Response status code does not indicate success: 401 (Unauthorized).
+2026-09-20T10:01:03.200Z ##[error]The nuget command failed with exit code(1) and error(NU1301)
+2026-09-20T10:01:03.300Z ##[section]Finishing: NuGetCommand

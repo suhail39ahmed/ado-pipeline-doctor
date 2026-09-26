@@ -1,0 +1,5 @@
+2026-09-21T08:15:00.000Z ##[section]Starting: AzureResourceManagerTemplateDeployment
+2026-09-21T08:15:01.000Z ##[error]Error: Could not fetch access token for Azure. Status code: invalid_client, Status message: Error(s): 7000222 - AADSTS7000222: The provided client secret keys for app '***' are expired.
+2026-09-21T08:15:01.100Z ##[error]Service connection 'sc-prod-arm' failed authentication.
+2026-09-21T08:15:01.200Z ##[error]##[error]Bash exited with code '1'.
+2026-09-21T08:15:01.300Z ##[section]Finishing: AzureResourceManagerTemplateDeployment

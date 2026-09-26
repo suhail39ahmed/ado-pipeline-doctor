@@ -1,0 +1,11 @@
+##[group]Run pytest -q
+F....F
+=================================== FAILURES ===================================
+_________________________ test_billing_total __________________________
+AssertionError: assert 42.0 == 41.5
+E       assert abs(got - expected) < 1e-6
+=========================== short test summary info ============================
+FAILED tests/test_billing.py::test_billing_total - AssertionError
+FAILED tests/test_billing.py::test_tax_round - AssertionError
+============= 2 failed, 18 passed in 3.21s ==============
+Error: Process completed with exit code 1.

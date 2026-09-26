@@ -25,3 +25,8 @@ labs/
 .vscode/
 .DS_Store
 *.swp
+
+# Keep fixture logs (override *.log)
+!fixtures/
+!fixtures/**/
+!fixtures/**/*.log

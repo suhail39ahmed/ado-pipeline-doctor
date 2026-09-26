@@ -1,0 +1,6 @@
+##[group]Run npm ci
+npm error code E401
+npm error 401 Unauthorized - GET https://npm.pkg.github.com/@org/private-lib - authentication token not provided
+npm error A complete log of this run can be found in: /home/runner/.npm/_logs/2026-09-22-debug-0.log
+Error: Process completed with exit code 1.
+##[error]Process completed with exit code 1.
