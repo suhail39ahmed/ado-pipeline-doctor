@@ -1,5 +1,7 @@
 # ado-pipeline-doctor
 
+![ADO Pipeline Doctor: failed CI logs in, human-approved fixes out](docs/cover.jpg)
+
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)
 ![Status](https://img.shields.io/badge/status-0.1.0%20MVP-green.svg)
@@ -43,9 +45,51 @@ Or with pipx (once published to PyPI): `pipx install ado-pipeline-doctor` — un
 - Not a hosted SaaS — offline CLI + skill docs
 - No fabricated production-usage claims — fixtures only
 
-## Architecture
+## Design & Engineering
+
+I designed this as a small, boring, trustworthy building block: something an agent can call to explain a red build, without ever being allowed to change the pipeline itself.
+
+**Design goals**
+
+- Turn a raw Azure Pipelines or GitHub Actions log into structured RCA JSON that a human or an agent can act on.
+- Never auto-fix. Every result carries `human_approval_required: true`.
+- Run offline on fixtures, so it is easy to test and demo with no tenant access.
+
+**Architecture**
 
 ![Architecture](assets/architecture.svg)
+
+```mermaid
+flowchart LR
+    L[Failed log<br/>ADO or GHA] --> P[parser.py<br/>detect shape, errors, steps, exit code]
+    P --> R[rca.py<br/>rule packs: match hints]
+    R --> J[RCA JSON<br/>category, summary, remediations<br/>human_approval_required: true]
+    R -- no rule matched --> M[Unrecognized:<br/>manual triage]
+    J --> H[Human / agent skill<br/>SKILL.md]
+```
+
+**Key design decisions and trade-offs**
+
+| Decision | Why | Trade-off |
+|---|---|---|
+| Rules before LLMs | Deterministic, explainable, testable; same input always gives the same RCA | Only knows the failure patterns I have written rules for |
+| A rule fires on 2+ matching hints | Cuts false positives from one stray word like "expired" | A very short log can miss a rule |
+| Human approval flag is hard-coded | Safe to plug into an agent; it can suggest, never patch YAML | Someone still has to apply the fix |
+| Explicit "unrecognized" result | Better to say "triage manually" than invent a cause | Less impressive output on unknown failures |
+
+**Engineering details**
+
+- **Stack:** Python 3.10+, standard library regex parsing, `argparse` CLI (`python -m pipeline_doctor`), text or JSON output.
+- **Rule packs today:** NuGet 401, expired Azure service-connection secret (AADSTS7000222), GitHub Packages npm auth, pytest assertion failures.
+- **Fixtures:** real-shaped logs in `fixtures/azure-pipelines/` and `fixtures/github-actions/`.
+- **CI:** `make demo` runs the doctor on fixtures and asserts the approval flag is present; the workflow template is in [`docs/ci/demo.yml`](docs/ci/demo.yml).
+- **Agent use:** [`SKILL.md`](SKILL.md) describes how an agent should call it and present the result.
+
+**What I'd do next**
+
+- More rule packs (npm cache, OIDC, service connections) and unit tests per rule.
+- An optional LLM "explain" layer that must return the same JSON schema.
+- A read-only Azure DevOps REST adapter behind a feature flag, so it can pull logs itself.
 
 ## Roadmap
 
